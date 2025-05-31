@@ -1,10 +1,12 @@
 import os
 
-import config
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel
+
+import config
 
 SECRET_KEY = os.getenv("OPENAPI_KEY")
 
@@ -48,3 +50,7 @@ Do not explain. Return only valid {req.language} code using {req.orm} ORM.
         return {"result": response.choices[0].message.content.strip()}
     except Exception as e:
         return {"error": str(e)}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
